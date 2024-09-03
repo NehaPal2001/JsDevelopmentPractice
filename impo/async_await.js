@@ -19,7 +19,7 @@ async function handlePromise() {
   console.log("Namaste javascript2");
   console.log(val2);
   //both val and val2 print at same time but the promise got
-  //   resolved after 5 sec and p1 after 10 sec but gets printed at the same time
+  //resolved after 5 sec and p1 after 10 sec but gets printed at the same time
 }
 handlePromise();
 

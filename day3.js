@@ -4,7 +4,7 @@
 //Instead, the variable to which the arrow function is assigned
 //is hoisted, but the function itself is not initialized until
 //the code is executed.
-simpleFunction(); // Refernce error in execution context it show undefined because it behaving like avariable
+arrowFunctionSyntax(); // Refernce error in execution context it show undefined because it behaving like avariable
 const arrowFunctionSyntax = () => {
   console.log("I am arrow function");
 };
@@ -15,7 +15,6 @@ function simpleFunction() {
 }
 
 //arrow function
-//uses ->
 
 const person = {
   name: "Alice",

@@ -1,4 +1,4 @@
-// Variables-> let, const, vaer
+// Variables-> let, const, var
 // datatypes -> String,Number, Boolean ,Null(no value or empty) , Undefined(value not defined yet) , Symbol (Primitive datatype)
 // Objects ->(non-primitive datatypes)
 //function is called first class citizens in javascript
