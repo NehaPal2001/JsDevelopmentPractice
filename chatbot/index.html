@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot UI</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="chat-container">
+      <div id="chat-window" class="chat-window"></div>
+
+      <div id="prompt-buttons" class="prompt-buttons">
+        <button
+          class="prompt-btn"
+          onclick="handleUserInput('What is your name?')"
+        >
+          What is your name?
+        </button>
+        <button
+          class="prompt-btn"
+          onclick="handleUserInput('Schedule a meeting')"
+        >
+          Schedule a meeting
+        </button>
+      </div>
+
+      <div id="schedule-meeting" class="schedule-meeting hidden">
+        <h3>Select Meeting Date and Time</h3>
+        <input type="date" id="meeting-date" required />
+        <input type="time" id="meeting-time" required />
+        <button class="submit-btn" onclick="confirmMeeting()">Confirm</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
