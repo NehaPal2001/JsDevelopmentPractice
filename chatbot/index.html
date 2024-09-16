@@ -8,8 +8,10 @@
   </head>
   <body>
     <div class="chat-container">
+      <!-- Chat Window -->
       <div id="chat-window" class="chat-window"></div>
 
+      <!-- Prompt Buttons -->
       <div id="prompt-buttons" class="prompt-buttons">
         <button
           class="prompt-btn"
@@ -23,8 +25,21 @@
         >
           Schedule a meeting
         </button>
+        <button
+          class="prompt-btn"
+          onclick="handleUserInput('What services do you provide?')"
+        >
+          What services do you provide?
+        </button>
+        <button
+          class="prompt-btn"
+          onclick="handleUserInput('Can you share some reviews from clients?')"
+        >
+          Reviews from clients
+        </button>
       </div>
 
+      <!-- Meeting Scheduling -->
       <div id="schedule-meeting" class="schedule-meeting hidden">
         <h3>Select Meeting Date and Time</h3>
         <input type="date" id="meeting-date" required />
