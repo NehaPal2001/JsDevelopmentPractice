@@ -1,11 +1,10 @@
 const chatWindow = document.getElementById("chat-window");
 let conversation = [];
 
-// Typing effect duration
 const typingDuration = 1000;
 
 const responses = {
-  "What is your name?": "My name is ChatBot, nice to meet you!",
+  "What is your name?": "My name is Sia from SDET, nice to meet you!",
   "Schedule a meeting": "Please select a date and time for the meeting.",
   "What services do you provide?":
     "We provide various testing services such as automation testing, performance testing, and security testing.",
@@ -28,21 +27,32 @@ function handleUserInput(prompt) {
 function addMessage(sender, message) {
   const messageElement = document.createElement("div");
   messageElement.className = `${sender}-message`;
-  messageElement.textContent = message;
-  chatWindow.appendChild(messageElement);
+  if (sender === "bot") {
+    messageElement.textContent = "Typing...";
+    messageElement.classList.add("typing");
+    chatWindow.appendChild(messageElement);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    setTimeout(() => {
+      messageElement.textContent = message;
+      messageElement.classList.remove("typing");
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }, typingDuration);
+  } else {
+    messageElement.textContent = message;
+    chatWindow.appendChild(messageElement);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
 
   conversation.push(message);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-// Initial bot message when the page loads
 window.onload = function () {
   setTimeout(() => {
     addMessage(
       "bot",
       "Hello, I am SDET Automated Assistance. How can I help you?"
     );
-  }, typingDuration); // Simulate typing delay
+  }, typingDuration);
 };
 
 async function confirmMeeting() {
