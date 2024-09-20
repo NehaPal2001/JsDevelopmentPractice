@@ -1,9 +1,21 @@
 const chatWindow = document.getElementById("chat-window");
 let conversation = [];
 
+function loadConversation() {
+  const storedConversation = JSON.parse(
+    localStorage.getItem("chatConversation")
+  );
+  if (storedConversation && storedConversation.length > 0) {
+    conversation = storedConversation;
+    storedConversation.forEach((message) => {
+      addMessage(message.sender, message.message, false, false);
+    });
+  }
+}
+
 const typingDuration = 1000;
 
-const responses = {
+const responses1 = {
   "What is your name?": "My name is Sia from SDET, nice to meet you!",
   "Schedule a meeting": "Please select a date and time for the meeting.",
   "What services do you provide?":
@@ -19,16 +31,16 @@ function handleUserInput(prompt) {
       document.getElementById("prompt-buttons").style.display = "none";
       document.getElementById("schedule-meeting").classList.remove("hidden");
     } else {
-      addMessage("bot", responses[prompt]);
+      addMessage("bot", responses1[prompt]);
     }
   }, typingDuration);
 }
 
-function addMessage(sender, message) {
+function addMessage(sender, message, persist = true, typing = true) {
   const messageElement = document.createElement("div");
   messageElement.className = `${sender}-message`;
 
-  if (sender === "bot") {
+  if (sender === "bot" && typing) {
     messageElement.textContent = "Typing...";
     messageElement.classList.add("typing");
     chatWindow.appendChild(messageElement);
@@ -44,19 +56,22 @@ function addMessage(sender, message) {
     chatWindow.appendChild(messageElement);
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
-
-  conversation.push({ sender, message });
-
-  localStorage.setItem("chatConversation", JSON.stringify(conversation));
+  if (persist) {
+    conversation.push({ sender, message });
+    localStorage.setItem("chatConversation", JSON.stringify(conversation));
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  setTimeout(() => {
-    addMessage(
-      "bot",
-      "Hello, I am SDET Automated Assistance. How can I help you?"
-    );
-  }, typingDuration);
+  loadConversation();
+  if (conversation.length === 0) {
+    setTimeout(() => {
+      addMessage(
+        "bot",
+        "Hello, I am SDET Automated Assistance. How can I help you?"
+      );
+    }, typingDuration);
+  }
 });
 
 async function confirmMeeting() {
@@ -104,3 +119,6 @@ async function confirmMeeting() {
     alert("Please select both date and time.");
   }
 }
+// https://img.freepik.com/free-psd/cute-3d-robot-waving-hand-cartoon-vector-icon-illustration-people-technology-isolated-flat-vector_138676-10649.jpg?w=740&t=st=1726825907~exp=1726826507~hmac=44b5f145ae4b0a6934c6f852912187de1e3b7d2f0df7087f5d341d0230d423c6
+
+// chatbot image
