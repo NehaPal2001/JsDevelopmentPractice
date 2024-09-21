@@ -90,13 +90,16 @@ async function confirmMeeting() {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/send-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(emailData),
-      });
+      const response = await fetch(
+        "https://js-development-practice.vercel.app/send-email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(emailData),
+        }
+      );
       const result = await response.json();
       if (result.success) {
         addMessage(

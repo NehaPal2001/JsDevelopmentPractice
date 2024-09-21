@@ -14,6 +14,7 @@ app.get("/api", (req, res) => {
 
 app.post("/send-email", async (req, res) => {
   const { conversation, username, meetingDetails } = req.body;
+  console.log(conversation.message);
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -27,9 +28,10 @@ app.post("/send-email", async (req, res) => {
     to: process.env.EMAIL_USER,
     from: "palneha671@gmail.com",
     subject: `Meeting Scheduled by ${username}`,
-    text: `Here are the meeting details:\n${meetingDetails}\n\nConversation:\n${conversation.join(
-      "\n"
-    )}`,
+    text: `Here are the meeting details:\n${meetingDetails}\n\nConversation:\n${conversation
+      .filter((msg) => msg.sender === "user")
+      .map((msg) => msg.message)
+      .join("\n")}`,
   };
 
   try {
