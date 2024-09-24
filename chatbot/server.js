@@ -14,7 +14,7 @@ app.get("/api", (req, res) => {
 });
 
 app.post("/send-email", async (req, res) => {
-  const { conversation, username, meetingDetails } = req.body;
+  const { conversation, username, meetingDetails, email, phone } = req.body;
   console.log(conversation.message);
 
   const transporter = nodemailer.createTransport({
@@ -29,7 +29,7 @@ app.post("/send-email", async (req, res) => {
     to: process.env.EMAIL_USER,
     from: "palneha671@gmail.com",
     subject: `Meeting Scheduled by ${username}`,
-    text: `Here are the meeting details:\n${meetingDetails}\n\nConversation:\n${conversation
+    text: `Users Email ${email}\n, Users Phone Number ${phone}\n\n Here are the meeting details:\n${meetingDetails}\n\nConversation:\n${conversation
       .filter((msg) => msg.sender === "user")
       .map((msg) => msg.message)
       .join("\n")}`,
