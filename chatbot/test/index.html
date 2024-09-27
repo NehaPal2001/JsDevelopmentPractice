@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="chatbot-icon" onclick="toggleChatbox()">
+      <img src="file.png" alt="chatbot Icon" />
+      <div id="dialog-box" class="dialog-box">Hello, How can I help you !!</div>
+    </div>
+
+    <div id="chatbox" class="hidden">
+      <div class="company-info">
+        <img class="company-logo" src="logosdet.png" alt="Company Logo" />
+      </div>
+
+      <div class="chat-container">
+        <div id="chat-window" class="chat-window"></div>
+        <div id="prompt-buttons" class="prompt-buttons"></div>
+      </div>
+      <div id="schedule-email-phone" class="schedule-email-phone hidden">
+        <h4>Enter Your Details</h4>
+        <label for="user-email">Email:</label>
+        <input type="email" id="user-email" placeholder="Enter your email" />
+        <label for="user-phone">Phone Number:</label>
+        <input
+          type="tel"
+          id="user-phone"
+          placeholder="Enter your phone number"
+        />
+        <button class="submit-btn" onclick="confirmEmailPhone()">Next</button>
+      </div>
+
+      <div id="schedule-meeting-modal" class="modal hidden">
+        <div class="modal-content">
+          <span class="close-btn" onclick="closeModal()">×</span>
+          <h3>Schedule a Meeting</h3>
+          <label for="meeting-date">Date:</label>
+          <input type="date" id="meeting-date" />
+          <label for="meeting-time">Time:</label>
+          <input type="time" id="meeting-time" />
+          <button class="submit-btn" onclick="confirmMeeting()">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

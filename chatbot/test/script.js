@@ -5,34 +5,52 @@ function loadConversation() {
   const storedConversation = JSON.parse(
     localStorage.getItem("chatConversation")
   );
+
   if (storedConversation && storedConversation.length > 0) {
     conversation = storedConversation;
+
     storedConversation.forEach((message) => {
       addMessage(message.sender, message.message, false, false);
     });
+    const lastBotMessage = storedConversation
+      .reverse()
+      .find((message) => message.sender === "bot");
+
+    if (lastBotMessage) {
+      const responseKey = Object.keys(responses).find((key) =>
+        responses[key].response.includes(lastBotMessage.message)
+      );
+
+      if (responseKey) {
+        updatePromptButtons(responses[responseKey].options);
+      }
+    }
+
+    document.getElementById("prompt-buttons").style.display = "flex";
   }
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+  loadConversation();
+  const lastBotMessage =
+    conversation.length > 0 ? conversation[0].message : null;
+
+  if (
+    conversation.length === 0 ||
+    lastBotMessage ===
+      "Your meeting has been scheduled and an email has been sent."
+  ) {
+    setTimeout(() => {
+      addMessage("bot", responses["Welcome"].response[0]);
+      updatePromptButtons(responses["Welcome"].options);
+      document.getElementById("prompt-buttons").style.display = "flex";
+    }, typingDuration);
+  }
+});
+
 const typingDuration = 1000;
 
-// const responses1 = {
-//   "General Inquiry?":
-//     "Sure! We specialize in a range of software quality testing services including Test Automation, Performance Testing, Security Testing, Mobile Testing, and more. Would you like more detailed information on any specific service?",
-
-//   "About SDET":
-//     "I'd be happy to assist with that! We at ABC are a group of Software Quality Evangelists, passionate about delivering top-notch software product quality. The team of quality experts has vast experience in various products/business domains such as E-Learning/Publishing, Real estate, Mortgage/Lending, E-Commerce, Retail, Store Inventory, Health care, FinTech, etc. ",
-//   "Schedule a meeting": "Please select a date and time for the meeting.",
-
-//   "What services do you provide?":
-//     "We provide various testing services such as automation testing, performance testing, and security testing.",
-//   "Case Studies or Testimonials?":
-//     "Certainly! We have over 100+ successful projects across various industries. Would you like to view our case studies or read testimonials from our clients?",
-//   "Can you share some reviews from clients?":
-//     "Our clients love the efficiency and accuracy of our services! John says: 'The best testing team we've worked with.'",
-//   "Test Automation?":
-//     "Here’s more information about our Test Automation services. [Link to service page]",
-// };
-const responses1 = {
+const responses = {
   Welcome: {
     response: [
       "Hi there! Welcome to ABC. I'm here to help you with anything related to software quality testing. How can I assist you today?",
@@ -71,9 +89,10 @@ const responses1 = {
   "Schedule a Meeting": {
     response: [
       "Absolutely! I can help with that. Please select a date and time that works best for you, and let us know if you prefer a video call, phone call, or in-person meeting.",
+      "Your meeting has been scheduled and an email has been sent.",
     ],
 
-    options: ["Select Date and Time"],
+    options: [],
   },
 
   "Case Studies or Testimonials": {
@@ -86,7 +105,7 @@ const responses1 = {
 
   "Test Automation": {
     response: [
-      "Here’s more information about our Test Automation services. [Link to service page]",
+      'Here’s more information about our Test Automation services. <a href="https://sdettech.com/test-automation-development/" target="_blank">Link to automation page</a>',
     ],
 
     options: ["Back to Main Menu"],
@@ -171,15 +190,61 @@ const responses1 = {
 };
 
 function handleUserInput(prompt) {
+  document.body.style.cursor = "wait";
   addMessage("user", prompt);
   setTimeout(() => {
-    if (prompt === "Schedule a meeting") {
-      document.getElementById("prompt-buttons").style.display = "none";
-      document.getElementById("schedule-meeting").classList.remove("hidden");
+    const botResponse = responses[prompt] || responses["Welcome"];
+    console.log(botResponse);
+    botResponse.response.forEach((res) => addMessage("bot", res));
+    if (prompt === "Schedule a Meeting") {
+      showEmailPhoneInput();
     } else {
-      addMessage("bot", responses1[prompt]);
+      updatePromptButtons(botResponse.options);
     }
+    document.body.style.cursor = "default";
   }, typingDuration);
+}
+
+function updatePromptButtons(options) {
+  const buttonsContainer = document.getElementById("prompt-buttons");
+  buttonsContainer.innerHTML = "";
+
+  options.forEach((option) => {
+    const button = document.createElement("button");
+    button.className = "prompt-btn";
+    button.textContent = option;
+
+    if (option === "Schedule a Meeting") {
+      button.onclick = () => {
+        showEmailPhoneInput();
+      };
+    } else {
+      button.onclick = () => {
+        document.querySelectorAll(".prompt-btn").forEach((btn) => {
+          btn.disabled = true;
+        });
+
+        handleUserInput(option);
+
+        setTimeout(() => {
+          document.querySelectorAll(".prompt-btn").forEach((btn) => {
+            btn.disabled = false;
+          });
+        }, typingDuration);
+      };
+    }
+
+    buttonsContainer.appendChild(button);
+  });
+}
+
+function showEmailPhoneInput() {
+  const emailPhoneDiv = document.getElementById("schedule-email-phone");
+  emailPhoneDiv.classList.remove("hidden");
+  document.getElementById("prompt-buttons").style.display = "none";
+
+  document.getElementById("user-email").value = "";
+  document.getElementById("user-phone").value = "";
 }
 
 function addMessage(sender, message, persist = true, typing = true) {
@@ -202,37 +267,94 @@ function addMessage(sender, message, persist = true, typing = true) {
     chatWindow.appendChild(messageElement);
     chatWindow.scrollTop = chatWindow.scrollHeight;
   }
+
   if (persist) {
     conversation.push({ sender, message });
     localStorage.setItem("chatConversation", JSON.stringify(conversation));
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  loadConversation();
-  if (conversation.length === 0) {
-    setTimeout(() => {
-      addMessage(
-        "bot",
-        "Hi there! Welcome to SDET. I'm here to help you with anything related to software quality testing. How can I assist you today?"
-      );
-    }, typingDuration);
-  }
-});
 function toggleChatbox() {
   const chatbox = document.getElementById("chatbox");
-  const isHidden = chatbox.classList.contains("hidden");
-
-  if (isHidden) {
+  const dialogBox = document.getElementById("dialog-box");
+  if (!dialogBox.classList.contains("hidden")) {
+    dialogBox.classList.add("hidden");
+  }
+  if (chatbox.classList.contains("hidden")) {
     chatbox.classList.remove("hidden");
+    chatbox.classList.add("open");
   } else {
     chatbox.classList.add("hidden");
+    chatbox.classList.remove("open");
   }
 }
+
+function confirmEmailPhone() {
+  const email = document.getElementById("user-email").value;
+  const phone = document.getElementById("user-phone").value;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^(?:\+?\d{12}|\d{10})$/;
+
+  if (email && phone) {
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    if (!phoneRegex.test(phone)) {
+      alert(
+        "Please enter a valid mobile number. It should be either 10 digits or start with '+' followed by 12 digits."
+      );
+      return;
+    }
+
+    const scheduleEmailPhone = document.getElementById("schedule-email-phone");
+    scheduleEmailPhone.classList.add("hidden");
+
+    const scheduleMeeting = document.getElementById("schedule-meeting-modal");
+    scheduleMeeting.classList.remove("hidden");
+
+    addMessage("user", `Email: ${email}`);
+    addMessage("user", `Phone Number: ${phone}`);
+  } else {
+    alert("Please enter both email and phone number.");
+  }
+}
+
+function openModal() {
+  document.getElementById("schedule-meeting-modal").classList.remove("hidden");
+  //   document.getElementById("schedule-meeting-modal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("schedule-meeting-modal").classList.add("hidden");
+  //   document.getElementById("schedule-meeting-modal").style.display = "none";
+  document.getElementById("prompt-buttons").style.display = "flex";
+}
+
 async function confirmMeeting() {
   const date = document.getElementById("meeting-date").value;
   const time = document.getElementById("meeting-time").value;
+  const email = document.getElementById("user-email").value;
+  const phone = document.getElementById("user-phone").value;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^(?:\+?\d{12}|\d{10})$/;
+
   if (date && time) {
+    const meetingDateTime = new Date(`${date}T${time}`);
+
+    const now = new Date();
+
+    // Validate that the meeting date and time are in the future
+    if (meetingDateTime <= now) {
+      alert("Please select a date and time that is in the future.");
+      return;
+    }
+
+    console.log(date, time, email, phone);
+
     addMessage(
       "user",
       `I would like to schedule a meeting on ${date} at ${time}`
@@ -240,6 +362,8 @@ async function confirmMeeting() {
 
     const emailData = {
       conversation,
+      email,
+      phone,
       username: "User's Name",
       meetingDetails: `Meeting scheduled on ${date} at ${time}`,
     };
@@ -255,11 +379,13 @@ async function confirmMeeting() {
           body: JSON.stringify(emailData),
         }
       );
+
       const result = await response.json();
+      closeModal();
       if (result.success) {
         addMessage(
           "bot",
-          "Your meeting has been scheduled and email has been sent."
+          "Your meeting has been scheduled and an email has been sent."
         );
       } else {
         addMessage(
@@ -270,14 +396,9 @@ async function confirmMeeting() {
     } catch (error) {
       addMessage("bot", "An error occurred while sending the email.");
     }
-
-    document.getElementById("schedule-meeting").classList.add("hidden");
+    closeModal();
     document.getElementById("prompt-buttons").style.display = "flex";
   } else {
     alert("Please select both date and time.");
   }
 }
-
-// https://img.freepik.com/free-psd/cute-3d-robot-waving-hand-cartoon-vector-icon-illustration-people-technology-isolated-flat-vector_138676-10649.jpg?w=740&t=st=1726825907~exp=1726826507~hmac=44b5f145ae4b0a6934c6f852912187de1e3b7d2f0df7087f5d341d0230d423c6
-
-// chatbot image
