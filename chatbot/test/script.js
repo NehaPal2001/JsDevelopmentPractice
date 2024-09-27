@@ -82,8 +82,7 @@ const responses = {
     response: [
       "I'd be happy to assist with that! We at ABC are a group of Software Quality Evangelists, passionate about delivering top-notch software product quality. The team of quality experts has vast experience in various products/business domains such as E-Learning/Publishing, Real estate, Mortgage/Lending, E-Commerce, Retail, Store Inventory, Health care, FinTech, etc. [Read More]",
     ],
-
-    options: ["Read More"],
+    options: ["Back to Main Menu"],
   },
 
   "Schedule a Meeting": {
@@ -92,7 +91,7 @@ const responses = {
       "Your meeting has been scheduled and an email has been sent.",
     ],
 
-    options: [],
+    options: ["Back to Main Menu"],
   },
 
   "Case Studies or Testimonials": {
@@ -133,8 +132,9 @@ const responses = {
 
   "Other Services": {
     response: [
-      "We offer other specialized services as well. Please visit our services page for more details. [Link]",
+      'We offer other specialized services as well. Please visit our services page for more details. <a href="https://sdettech.com/performance-and-load-testing/" target="_blank">view services</a>',
     ],
+    
 
     options: ["Back to Main Menu"],
   },
@@ -258,7 +258,7 @@ function addMessage(sender, message, persist = true, typing = true) {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
     setTimeout(() => {
-      messageElement.textContent = message;
+      messageElement.innerHTML = message; 
       messageElement.classList.remove("typing");
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }, typingDuration);
@@ -323,13 +323,17 @@ function confirmEmailPhone() {
 }
 
 function openModal() {
-  document.getElementById("schedule-meeting-modal").classList.remove("hidden");
-  //   document.getElementById("schedule-meeting-modal").style.display = "block";
+  document.getElementById("schedule-email-phone").classList.remove("hidden");
+}
+function closeEmailPhoneModal(){
+  const scheduleEmailPhone = document.getElementById("schedule-email-phone");
+  scheduleEmailPhone.classList.add("hidden");
+  document.getElementById("prompt-buttons").style.display = "flex";
+
 }
 
 function closeModal() {
   document.getElementById("schedule-meeting-modal").classList.add("hidden");
-  //   document.getElementById("schedule-meeting-modal").style.display = "none";
   document.getElementById("prompt-buttons").style.display = "flex";
 }
 
