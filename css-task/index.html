@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS-PRACTICE</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <section class="video-section">
+        <div class="container">
+            <div class="row">
+                <div class="text-center">
+                    <h3 class="heading-mn text-uppercase">Latest Videos</h3>
+                </div>
+                <div class="videoContainer">
+                    <div class="videoImgBox" onclick="openVideo('https://www.youtube.com/embed/0k6tU7mESeY')">
+                        <img src="./forest-landscape.jpg" alt="Video 1">
+                        <!-- <div class="play-icon"><i class="fa fa-youtube-play"></i></div> -->
+                        <div class="VideoTitle">title 1</div>
+                    </div>
+                    <div class="videoImgBox" onclick="openVideo('https://www.youtube.com/embed/RMtPn5Vgbyo')">
+                        <img src="./forest-landscape.jpg" alt="Video 2">
+                        <div class="VideoTitle">title 2</div>
+                    </div>
+                    <div class="videoImgBox" onclick="openVideo('https://www.youtube.com/embed/Z2M2T1KUSbwc')">
+                        <img src="./forest-landscape.jpg" alt="Video 3">
+                        <div class="VideoTitle">title 3</div>
+                    </div>
+                    <div id="videoModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal()">&times;</span>
+                            <iframe id="videoFrame" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <script src="script.js"></script>
+</body>
+
+</html>
