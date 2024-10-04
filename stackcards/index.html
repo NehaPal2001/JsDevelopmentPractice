@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing: border-box;
+    }
+    .header, .footer{
+        background-color: navy;
+        color: white;
+        height:200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .card{
+        width: 100vw;
+        height:100vh;
+        background:rgba(75, 131, 228, 0.8) ;
+        color: white    ;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-color: black;
+        position: sticky;
+        top: 0;
+    }
+    .card img{
+        position: absolute;
+        z-index:1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* filter: brightness(0.5); */
+    }
+    .card-content{
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .modify{
+        background-color: aquamarine;
+        display: flex;
+        
+    }
+</style>
+<body>
+    <div class="header">Header</div>
+        <div>  
+            <div class="card">
+                <img src="./forest-landscape.jpg">
+                <div class="card-content">
+                    <button class="modify">click</button>
+                </div>
+
+            </div>
+            <div class="card">
+                <img src="./forest-landscape.jpg">
+                <div class="card-content">
+                    Card-2
+                </div>
+            </div>
+            <div class="card">
+                <img src="./forest-landscape.jpg">
+                <div class="card-content">
+                    Card-3
+                </div>
+            </div>
+            <div class="card">
+                <img src="./forest-landscape.jpg">
+                <div class="card-content">
+                    Card-4
+                </div>
+            </div>
+            <div class="card">
+                <img src="./forest-landscape.jpg">
+                <div class="card-content">
+                    Card-5
+                </div>
+            </div>
+        </div>
+    <div class="footer">Footer</div>
+</body>
+</html>
